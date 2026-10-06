@@ -360,6 +360,67 @@ static const board_pin_t k_pins[] = {
 };
 
 /* ------------------------------------------------------------------
+ * espressif_esp32s31_function_coreboard_1  (no CircuitPython port yet)
+ * Header J2, from the board user guide and schematic V1.0.
+ * GPIO5-19 (RGMII), 50-57 (audio codec) and 33/34 (USB Serial/JTAG)
+ * are used on board and not broken out.
+ * ------------------------------------------------------------------ */
+#elif defined(CONFIG_HARNESS_BOARD_ESPRESSIF_ESP32S31_FUNCTION_COREBOARD_1)
+
+static const board_pin_t k_pins[] = {
+    {"TX",        58},
+    {"IO58",      58},
+
+    {"RX",        59},
+    {"IO59",      59},
+
+    {"BOOT",      61},
+    {"BUTTON",    61},
+    {"IO61",      61},
+
+    {"NEOPIXEL",  60},
+    {"IO60",      60},
+
+    {"IO0",        0},
+    {"IO1",        1},
+    {"IO2",        2},
+    {"IO3",        3},
+
+    /* Also the YT8531 PHY INT_N output (4.7K pull-up) */
+    {"ETH_INT",    4},
+    {"IO4",        4},
+
+    {"SD_D0",     20},
+    {"IO20",      20},
+    {"SD_D1",     21},
+    {"IO21",      21},
+    {"SD_D2",     22},
+    {"IO22",      22},
+    {"SD_D3",     23},
+    {"IO23",      23},
+    {"SD_CLK",    24},
+    {"IO24",      24},
+    {"SD_CMD",    25},
+    {"IO25",      25},
+
+    {"IO35",      35},
+    /* Strapping pins: 36 = VDD_SPI voltage (keep high), 37 = JTAG source */
+    {"IO36",      36},
+    {"IO37",      37},
+    {"IO38",      38},
+    {"IO39",      39},
+    {"IO40",      40},
+    {"IO42",      42},
+    {"IO43",      43},
+    {"IO44",      44},
+    {"IO45",      45},
+    {"IO46",      46},
+    {"IO47",      47},
+    {"IO48",      48},
+    {"IO49",      49},
+};
+
+/* ------------------------------------------------------------------
  * Default: empty pin table
  * ------------------------------------------------------------------ */
 #else
