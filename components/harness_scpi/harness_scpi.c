@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -83,6 +84,27 @@ static void scpi_task(void *arg)
     }
 }
 
+/* Built-in table followed by the application's extra commands. */
+static const scpi_command_t *merge_command_tables(const scpi_command_t *extra)
+{
+    const scpi_command_t *base = harness_scpi_command_table();
+    if (extra == NULL || extra[0].pattern == NULL) {
+        return base;
+    }
+    size_t n_base = 0, n_extra = 0;
+    while (base[n_base].pattern != NULL) n_base++;
+    while (extra[n_extra].pattern != NULL) n_extra++;
+
+    scpi_command_t *merged = calloc(n_base + n_extra + 1, sizeof(*merged));
+    if (merged == NULL) {
+        return base;
+    }
+    memcpy(merged, base, n_base * sizeof(*merged));
+    memcpy(merged + n_base, extra, n_extra * sizeof(*merged));
+    /* calloc left the terminating entry zeroed, i.e. SCPI_CMD_LIST_END */
+    return merged;
+}
+
 esp_err_t harness_scpi_init(const harness_scpi_config_t *cfg)
 {
     if (!cfg || !cfg->io) return ESP_ERR_INVALID_ARG;
@@ -91,7 +113,7 @@ esp_err_t harness_scpi_init(const harness_scpi_config_t *cfg)
     build_serial();
 
     SCPI_Init(&s_scpi,
-              harness_scpi_command_table(),
+              merge_command_tables(cfg->extra_commands),
               &s_interface,
               scpi_units_def,
               "Chickadee", "esp-harness", s_serial, HARNESS_FW_VERSION,

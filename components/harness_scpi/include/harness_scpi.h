@@ -20,6 +20,9 @@ typedef struct {
     harness_io_t *io;           ///< Byte transport between USB CDC and parser.
     size_t task_stack_size;     ///< 0 -> default 8192.
     int task_priority;          ///< 0 -> default 5.
+    /** Optional application commands appended to the built-in table,
+     *  terminated by SCPI_CMD_LIST_END.  Must outlive the parser. */
+    const scpi_command_t *extra_commands;
 } harness_scpi_config_t;
 
 /**
